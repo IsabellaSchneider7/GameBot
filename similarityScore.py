@@ -29,20 +29,21 @@ def compare_sentence(A, B):
 def get_synonyms(A_list, B_list, same_list):
     add_score = 0;
     for item in A_list:
+        syn_list = []
         if not item in same_list:
             syns = wordnet.synsets(item)
-            syn_list = []
-            for i in range(10):
-                if len(syns)>i:
-                    syn_list.append(syns[i].lemmas()[0].name())
+            for syn in syns:
+                for l in syn.lemmas():
+                    syn_list.append(l.name())
 
             for word in syn_list:
                 if word in B_list:
                     add_score += 15
+                    break
             print(syn_list)
 
     return add_score
 
-A = "Cats and dogs chase cars fast spiders swim"
-B = "Dog chases car cats are lame"
+A = "Cats and dogs chase cars fast spiders swim good"
+B = "Dog chases car cats are lame well spider"
 compare_sentence(A, B)
