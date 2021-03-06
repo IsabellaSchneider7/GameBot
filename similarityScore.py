@@ -35,6 +35,10 @@ def get_synonyms(A_list, B_list, same_list):
             for i in range(10):
                 if len(syns)>i:
                     syn_list.append(syns[i].lemmas()[0].name())
+
+            for word in syn_list:
+                if word in B_list:
+                    add_score += 15
             print(syn_list)
 
     return add_score
