@@ -4,6 +4,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from test_game import start_game, next_drawing, next_phrase
 import discord
+from getFirebaseData import *
 
 # Setup
 load_dotenv()
@@ -46,7 +47,14 @@ async def on_message(message):
 #     newmessage = await ctx.fetch_message(message.id)
 #     players = [u for u in await newmessage.reactions[0].users().flatten() if u != bot.user]
 
-
+@bot.command(name = "scores")
+async def play(ctx):
+    data = sortPlayerOrder()
+    description = "** PLAYER \t \t SCORE **"
+    for element in data:
+        description = description + "\n" + str(element[0]) + "\t - \t" + str(element[1])
+    embed = discord.Embed(title="Leaderboard", description=description, colour=0x00ff00)
+    message = await ctx.send(embed = embed)
 # @bot.command(name = 'start')
 # async def start(ctx):
 #     if len(players)>3:
