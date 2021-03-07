@@ -1,5 +1,7 @@
 from firebase import firebase
 from firebaseKey import *
+import json
+import numpy as np
 
 def updateUserScore(user, amt):  # get the first sheet of the spreadsheet
     location = "Users/" + str(user)
@@ -9,6 +11,7 @@ def updateUserScore(user, amt):  # get the first sheet of the spreadsheet
     else:
         newScore = amt + currentScore
     firebase.put(location, "totalScore", newScore)
+    firebase.put(location, "mostRecentGame", amt)
     updateGamesPlayed(location)
 
 def getCurrentScore(loc):
@@ -23,5 +26,20 @@ def updateGamesPlayed(loc):
     else:
         games = getGamesPlayed(loc) + 1
     firebase.put(loc, "gamesPlayed", games)
+def sortPlayerOrder():
+    playerNames = []
+    playerNum = []
+    playerScores = []
+    playerData = []
+    result = firebase.get("Users", None)
+    for key, value in result.items():
+        playerData.append([key,result[key]['totalScore']])
 
-updateUserScore("medina", 17)
+    #sort based on high score
+    print (playerData)
+    playerData =sorted(playerData, key=lambda x:x[1], reverse = True)
+    print (playerData)
+    return playerData
+
+#updateUserScore("medina", 17)
+sortPlayerOrder()
