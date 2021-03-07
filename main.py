@@ -50,7 +50,7 @@ async def on_message(message):
                 await message.channel.send('Please send an image.')
         
 messages = []
-@bot.command(name = 'play')
+@bot.command(name = 'playtellestrations')
 async def play(ctx):
     if is_dm(ctx):
         await ctx.send('This command can only be used in a server!')
