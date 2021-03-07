@@ -2,13 +2,13 @@ import os
 from constants import PREFIX, game
 from discord.ext import commands
 from dotenv import load_dotenv
-from gameplay import start_game, next_drawing, next_phrase
+from gameplay import start_game, next_drawing, next_phrase, play2
 import discord
 from getFirebaseData import *
 
 # Setup
 load_dotenv()
-BOT_TOKEN = os.getenv('BOT_TOKEN')
+BOT_TOKEN = os.getenv(BOT_TOKEN)
 intent = discord.Intents().all()
 
 bot = commands.Bot(command_prefix=PREFIX, intents=intent)
@@ -18,6 +18,7 @@ async def on_ready():
     print('Ready!')
 
 bot.add_command(start_game)
+bot.add_command(play2)
 
 @bot.event
 async def on_message(message):
@@ -74,14 +75,16 @@ async def start(ctx):
         await ctx.send("Have " + str(3-len(game.players)) +" other player(s) react in order to play")
 
 
-@bot.command(name = "scores")
-async def play2(ctx):
-    data = sortPlayerOrder()
-    description = "** PLAYER \t \t SCORE **"
-    for element in data:
-        description = description + "\n" + str(element[0]) + "\t - \t" + str(element[1])
-    embed = discord.Embed(title="Leaderboard", description=description, colour=0x00ff00)
-    message = await ctx.send(embed = embed)
+# @bot.command(name = "scores")
+# async def play2(ctx):
+#     data = sortPlayerOrder()
+#     description = "** PLAYER \t \t SCORE **"
+#     guild = ctx.guild
+#     for element in data:
+#         name = ctx.guild[0].get_member(element[0]).name
+#         description = description + "\n" + str(name) + "\t - \t" + str(element[1])
+#     embed = discord.Embed(title="Leaderboard", description=description, colour=0x00ff00)
+#     message = await ctx.send(embed = embed)
 
 
 bot.run(BOT_TOKEN)
