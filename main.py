@@ -26,16 +26,22 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if (message.channel.id == game.current_player.dm_channel.id 
-    and not message.content.startswith(PREFIX)):
-        if len(message.attachments) > 0:
-            game.add_to_log(await message.attachments[0].to_file())
-            game.add_picture(await message.attachments[0].to_file())
-            await next_phrase()
+    if (not message.content.startswith(PREFIX) 
+    and message.channel.id == game.current_player.dm_channel.id):
+        if game.state_phrase:
+            if len(message.attachments) > 0:
+                await message.channel.send('Please only enter your prompt.')
+            else:
+                game.add_to_log(message.content)
+                game.add_phrase(message.content)
+                await next_drawing()
         else:
-            game.add_to_log(message.content)
-            game.add_phrase(message.content)
-            await next_drawing()
+            if len(message.attachments) > 0:
+                game.add_to_log(await message.attachments[0].to_file())
+                game.add_picture(await message.attachments[0].to_file())
+                await next_phrase()
+            else:
+                await message.channel.send('Please send an image.')
         
 messages = []
 @bot.command(name = 'play')

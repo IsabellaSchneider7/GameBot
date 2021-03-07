@@ -1,10 +1,12 @@
 class Game:
-    players = []
-    phrases = []
-    pictures = []
-    current_round = None
-    current_player = None
-    ctx = None
+    def __init__(self):
+        self.players = []
+        self.phrases = []
+        self.pictures = []
+        self.current_round = None
+        self.current_player = None
+        self.ctx = None
+        self.state_phrase = None
 
     log = []
 
@@ -18,8 +20,10 @@ class Game:
         self.current_round = 1
         self.current_player = self.players[0]
         self.ctx = ctx
+        self.state_phrase = True
 
     def __next_turn(self):
+        self.state_phrase = not self.state_phrase
         self.current_round += 1
         if self.can_continue():
             self.current_player = self.players[self.current_round-1]
@@ -42,10 +46,17 @@ class Game:
             print(f'killing, round={self.current_round} players={len(self.players)}')
         return not kill
 
+    def add_to_log(self, thing):
+        self.log.append(thing)
+
+    # For testing
     def __find_medina(self, players):
         for p in players:
             if p.name == 'medini the genie':
+
                 return p
 
     def add_to_log(self, thing):
         self.log.append(thing)
+
+                return p
