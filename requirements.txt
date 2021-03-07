@@ -1,3 +1,5 @@
 discord.py
 python-dotenv
 apscheduler
+firebase
+python-firebase

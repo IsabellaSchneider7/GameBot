@@ -4,6 +4,7 @@ class Game:
     pictures = []
     current_round = None
     current_player = None
+    ctx = None
 
     def add_player(self, player):
         self.players.append(player)
@@ -11,9 +12,10 @@ class Game:
     def remove_player(self, player):
         self.players.remove(player)
 
-    def start(self):
+    def start(self, ctx):
         self.current_round = 1
         self.current_player = self.players[0]
+        self.ctx = ctx
 
     def __next_turn(self):
         #self.current_player = self.players[self.current_round]
@@ -26,3 +28,9 @@ class Game:
     def add_picture(self, picture):
         self.pictures.append(picture)
         self.__next_turn()
+
+    def can_continue(self):
+        kill = self.current_round > len(self.players)
+        if kill:
+            print(f'killing, round={self.current_round} players={len(self.players)}')
+        return kill

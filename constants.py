@@ -1,4 +1,4 @@
 from game import Game
-PREFIX = '!'
+PREFIX = '-'
 
 game = Game()
