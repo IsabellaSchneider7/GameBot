@@ -42,6 +42,7 @@ async def play2(ctx):
         for member in guild.members:
             print(member.id)
             if str(id) == str(member.id):
+                print ("done")
                 user = member.name
 
         description = description + "\n" + str(user) + "\t - \t \t" + str(element[1])
