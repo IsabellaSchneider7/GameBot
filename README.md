@@ -1,6 +1,10 @@
 # GameBot
 Game bot for discord!!
 
+<p align="center">
+  <img src="https://github.com/IsabellaSchneider7/GameBot/blob/main/telebot%20logo.JPG" width="500" />
+</p>
+
 # Inspiration
 We were inspired to make TeleBot as a way to connect with friends during COVID. One game we all enjoy is Telestrations, a mix of the games Telephone and Pictionary. Many similar online games either cost money, require a second device to play, or are on a website that only works well on desktop. We wanted to make a game that was accessible and easy to play. We chose to make a Discord bot that serves as the moderator for the game, collecting player's drawings and guesses.
 
