@@ -41,10 +41,14 @@ async def start_game(ctx):
     game.start()
     player1 = game.current_player
     await player1.create_dm()
-    if (len(game.players)%2 == 0):
-        phrase = get_random_phrase()
-        await player1.dm_channel.send('Prompt: ' + str(phrase))
 
+    if (len(game.players)%2 == 0):
+        phrase = get_rand_phrase()
+        game.add_to_log(phrase)
+        game.phrases.append(phrase)
+        game.state_phrase = False
+
+        await next_drawing()
     else:
         await player1.dm_channel.send('Enter the starting prompt.')
     schedule()

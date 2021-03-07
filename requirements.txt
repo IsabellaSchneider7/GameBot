@@ -12,3 +12,4 @@ sseclient
 pycryptodome
 requests-toolbelt
 numpy
+

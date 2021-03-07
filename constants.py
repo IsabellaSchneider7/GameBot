@@ -5,7 +5,7 @@ PREFIX = '-'
 TIMEOUT = 150
 REMINDER = 120
 
-SETUP_TITLE = 'Playing game...'
+SETUP_TITLE = 'Playing Telestrations...'
 EMBED_COLOUR = 0x00ff00
 
 game = Game()
