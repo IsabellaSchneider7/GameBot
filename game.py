@@ -1,9 +1,11 @@
+from enum import Enum
 class Game:
     def __init__(self):
         self.players = []
         self.phrases = []
         self.pictures = []
         self.log = []
+        self.state = State.INACTIVE
 
     current_round = None
     current_player = None
@@ -63,3 +65,6 @@ class Game:
         self.phrases.clear()
         self.pictures.clear()
         self.log.clear()
+        self.state = State.INACTIVE
+
+State = Enum('State', 'INACTIVE WAITING PLAYING')

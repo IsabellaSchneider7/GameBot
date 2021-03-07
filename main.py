@@ -1,8 +1,9 @@
 import os
-from constants import PREFIX, game
+from constants import PREFIX, game, is_dm
 from discord.ext import commands
 from dotenv import load_dotenv
 from gameplay import try_start, next_drawing, next_phrase, get_scores
+from game import State
 
 import discord
 from getFirebaseData import *
@@ -29,6 +30,7 @@ async def on_message(message):
         return
 
     if (not message.content.startswith(PREFIX) 
+    and game.current_player != None
     and game.current_player.dm_channel != None
     and message.channel.id == game.current_player.dm_channel.id):
         if game.state_phrase:
@@ -49,7 +51,19 @@ async def on_message(message):
 messages = []
 @bot.command(name = 'play')
 async def play(ctx):
+    if is_dm(ctx):
+        await ctx.send('This command can only be used in a server!')
+        return
+
+    if game.state == State.WAITING:
+        await ctx.send('There is already a game being set up!')
+        return
+    if(game.state == State.PLAYING):
+        await ctx.send('Please wait for the current game to end.')
+        return
+
     game.reset()
+    game.state = State['WAITING']
     embed = discord.Embed(title = "Playing game...", description = "React to join game\nPlayers:",colour =0x00ff00)
     message = await ctx.send(embed = embed)
     messages.append(message.id) 
