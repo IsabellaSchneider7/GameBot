@@ -19,15 +19,15 @@ class Game:
 
     def start(self, ctx):
         self.current_round = 1
-        self.current_player = self.__find_medina(self.players)
+        self.current_player = self.players[0]
         self.ctx = ctx
         self.state_phrase = True
 
     def __next_turn(self):
         self.state_phrase = not self.state_phrase
         self.current_round += 1
-        #if self.can_continue():
-         #   self.current_player = self.players[self.current_round-1]
+        if self.can_continue():
+            self.current_player = self.players[self.current_round-1]
 
     def add_phrase(self, phrase):
         self.phrases.append(phrase)

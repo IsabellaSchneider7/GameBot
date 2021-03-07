@@ -1,6 +1,6 @@
 from game import Game
 PREFIX = '-'
-TIMEOUT = 15
-REMINDER = 10
+TIMEOUT = 150
+REMINDER = 120
 
 game = Game()

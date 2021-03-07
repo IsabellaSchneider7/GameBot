@@ -2,7 +2,7 @@ import os
 from constants import PREFIX, game
 from discord.ext import commands
 from dotenv import load_dotenv
-from gameplay import start_game, next_drawing, next_phrase
+from gameplay import try_start, next_drawing, next_phrase
 import discord
 from getFirebaseData import *
 
@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix=PREFIX, intents=intent)
 async def on_ready():
     print('Ready!')
 
-bot.add_command(start_game)
+bot.add_command(try_start)
 
 @bot.event
 async def on_message(message):
@@ -63,19 +63,9 @@ async def on_raw_reaction_add(payload):
                 newembed = discord.Embed(title = "Playing game...", description = message.embeds[0].description + " " + payload.member.mention, colour =0x00ff00)
                 game.add_player(member)
                 await message.edit(embed = newembed)
-                print(game.players)
-
-@bot.command(name = 'start')
-async def start(ctx):
-    if len(game.players)>2:
-        await ctx.send("Starting game...")
-        game.start(ctx)
-    else :
-        await ctx.send("Have " + str(3-len(game.players)) +" other player(s) react in order to play")
-
 
 @bot.command(name = "scores")
-async def play2(ctx):
+async def get_scores(ctx):
     data = sortPlayerOrder()
     description = "** PLAYER \t \t SCORE **"
     for element in data:

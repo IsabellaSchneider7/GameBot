@@ -10,19 +10,18 @@ from apscheduler.triggers.cron import CronTrigger
 from getFirebaseData import *
 from similarityScore import *
 
-@commands.command(name='startGame')
+@commands.command(name='start')
+async def try_start(ctx):
+    if len(game.players)>2:
+        await ctx.send("Starting game...")
+        await start_game(ctx)
+    else :
+        await ctx.send("Have " + str(3-len(game.players)) +" other player(s) react in order to play")
+
 async def start_game(ctx):
     global scheduler
     scheduler = AsyncIOScheduler()
     scheduler.start()
-
-   # game = Game()
-
-    guild = ctx.guild
-
-    for member in guild.members:
-        if not member.bot:
-            game.add_player(member)
 
     print(f'start, players={len(game.players)}')
     game.start(ctx)
