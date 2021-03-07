@@ -40,15 +40,27 @@ async def on_message(message):
             await next_drawing()
         
 
+messages = []
 players= []
 @bot.command(name = 'play')
 async def play(ctx):
     embed = discord.Embed(title = "Playing game...", description = "React to join game\nPlayers:",colour =0x00ff00)
     message = await ctx.send(embed = embed)
-    await message.add_reaction(":people_wrestling:")
-    newmessage = await ctx.fetch_message(message.id)
-    players = [u for u in await newmessage.reactions[0].users().flatten() if u != bot.user]
+    messages.append(message.id)
+    
 
+@bot.event
+async def on_raw_reaction_add(reaction_payload, ctx):
+    print("yay")
+    for x in messages:
+        if reaction_payload.message_id == x:
+            # players.append(reaction_payload.member)
+            print(reaction_payload.member)
+            message = await ctx.fetch_Message(x)
+            if reaction_payload.member.mention not in message.embeds.description:
+                print("yay")
+            # newembed = discord.Embed(title = "Playing game...", description = message.description + " " + payload.member.mention, colour =0x00ff00)
+            # await message.edit(embed = newembed)
 
 @bot.command(name = 'start')
 async def start(ctx):
