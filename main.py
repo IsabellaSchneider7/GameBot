@@ -20,24 +20,24 @@ async def on_ready():
 
 bot.add_command(start_game)
 
-@bot.event
-async def on_message(message):
-    await bot.process_commands(message)
+# @bot.event
+# async def on_message(message):
+#     await bot.process_commands(message)
 
-    if message.author == bot.user:
-        return 
+#     if message.author == bot.user:
+#         return 
 
-    #await game.current_player.dm_channel.send(message.channel)
-    #await game.current_player.dm_channel.send(game.current_player.dm_channel)
-    if (message.channel.id == game.current_player.dm_channel.id 
-    and not message.content.startswith(PREFIX)):
-        #await message.channel.send('moving on...')
-        if len(message.attachments) > 0:
-            game.add_picture(await message.attachments[0].to_file())
-            await next_phrase()
-        else:
-            game.add_phrase(message.content)
-            await next_drawing()
+#     #await game.current_player.dm_channel.send(message.channel)
+#     #await game.current_player.dm_channel.send(game.current_player.dm_channel)
+#     if (message.channel.id == game.current_player.dm_channel.id 
+#     and not message.content.startswith(PREFIX)):
+#         #await message.channel.send('moving on...')
+#         if len(message.attachments) > 0:
+#             game.add_picture(await message.attachments[0].to_file())
+#             await next_phrase()
+#         else:
+#             game.add_phrase(message.content)
+#             await next_drawing()
         
 
 messages = []
@@ -46,21 +46,24 @@ players= []
 async def play(ctx):
     embed = discord.Embed(title = "Playing game...", description = "React to join game\nPlayers:",colour =0x00ff00)
     message = await ctx.send(embed = embed)
-    messages.append(message.id)
-    
+    messages.append(message.id)    
 
 @bot.event
-async def on_raw_reaction_add(reaction_payload, ctx):
-    print("yay")
+async def on_raw_reaction_add(payload):
+    channel = bot.get_channel(payload.channel_id)
+    message = await channel.fetch_message(payload.message_id)
+    print(message)
+    guild = bot.get_guild(payload.guild_id)
+    member = guild.get_member(payload.user_id)
+    print(member)
     for x in messages:
-        if reaction_payload.message_id == x:
-            # players.append(reaction_payload.member)
-            print(reaction_payload.member)
-            message = await ctx.fetch_Message(x)
-            if reaction_payload.member.mention not in message.embeds.description:
+        if message.id == x:
+            players.append(member)
+            # message = await ctx.fetch_Message(x)
+            if payload.member.mention not in message.embeds[0].description:
                 print("yay")
-            # newembed = discord.Embed(title = "Playing game...", description = message.description + " " + payload.member.mention, colour =0x00ff00)
-            # await message.edit(embed = newembed)
+            newembed = discord.Embed(title = "Playing game...", description = message.embeds[0].description + " " + payload.member.mention, colour =0x00ff00)
+            await message.edit(embed = newembed)
 
 @bot.command(name = 'start')
 async def start(ctx):
