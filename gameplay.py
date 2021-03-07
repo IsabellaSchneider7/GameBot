@@ -21,6 +21,10 @@ async def try_start(ctx):
         await ctx.send('The game is already in progress!')
         return
 
+    if game.state == State.INACTIVE:
+        await ctx.send('There is no game being set up!')
+        return
+
     if len(game.players)>2:
         await ctx.send("Running game...")
         await start_game(ctx)
@@ -34,7 +38,7 @@ async def start_game(ctx):
     game.state = State.PLAYING
 
     print(f'start, players={len(game.players)}')
-    game.start(ctx)
+    game.start()
     player1 = game.current_player
     await player1.create_dm()
     if (len(game.players)%2 == 0):
@@ -74,7 +78,7 @@ async def next_drawing():
         await player.create_dm()
         await player.dm_channel.send(f'Please draw **{game.phrases[-1]}**')
     else:
-        await __end()
+        await __end_game()
 
 async def next_phrase():
     if game.can_continue():
@@ -83,26 +87,7 @@ async def next_phrase():
         await player.create_dm()
         await player.dm_channel.send('What is this?', file=game.pictures[-1])
     else:
-        await __end()
-
-async def end_game():
-    await game.ctx.channel.send('YOUR GAME RESULT:')
-    # Number of prompts is either numdrawings or numdrawings+1
-    for item in game.log:
-        if isinstance(item, str):
-            await game.ctx.send(item)
-        else:
-            await game.ctx.send(file=item)
-
-    one = game.get_first_phrase()
-    last = game.get_last_phrase()
-    score = compare_sentence(one, last)
-    for person in game.players:
-        updateUserScore(person.id, score)
-    print(score)
-
-    await game.ctx.send(score)
-    game.state = State.INACTIVE
+        await __end_game()
 
 def schedule():
     scheduler.remove_all_jobs()
@@ -125,7 +110,7 @@ async def __skip():
     game.current_round += 1
 
     if not game.can_continue():
-        await __end()
+        await __end_game()
         return
 
     if(len(game.log) <= 0):
@@ -138,6 +123,36 @@ async def __skip():
     else:
         await next_phrase()
 
-async def __end():
-    scheduler.remove_all_jobs()
-    await end_game()
+async def __end_game():
+    try:
+        scheduler.remove_all_jobs()
+    except:
+        pass
+
+    game.state = State.INACTIVE
+    
+    if len(game.log) <= 0:
+        return
+
+    await game.ctx.channel.send('YOUR GAME RESULT:')
+    # Number of prompts is either numdrawings or numdrawings+1
+    for item in game.log:
+        if isinstance(item, str):
+            await game.ctx.send(item)
+        else:
+            await game.ctx.send(file=item)
+
+    one = game.get_first_phrase()
+    last = game.get_last_phrase()
+    score = compare_sentence(one, last)
+    for person in game.players:
+        updateUserScore(person.id, score)
+    print(score)
+
+    await game.ctx.send(score)
+
+@commands.command(name='cancel')
+async def end_game(ctx):
+    await ctx.send('Cancelling game.')
+    await __end_game()
+

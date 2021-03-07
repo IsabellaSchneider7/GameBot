@@ -2,7 +2,7 @@ import os
 from constants import *
 from discord.ext import commands
 from dotenv import load_dotenv
-from gameplay import try_start, next_drawing, next_phrase, get_scores
+from gameplay import try_start, next_drawing, next_phrase, get_scores, end_game
 from game import State
 
 import discord
@@ -21,6 +21,7 @@ async def on_ready():
 
 bot.add_command(try_start)
 bot.add_command(get_scores)
+bot.add_command(end_game)
 
 @bot.event
 async def on_message(message):
@@ -63,6 +64,7 @@ async def play(ctx):
         return
 
     game.reset()
+    game.ctx = ctx
     game.state = State['WAITING']
     embed = discord.Embed(title = SETUP_TITLE, description = setup_message(game.players), colour =EMBED_COLOUR)
     message = await ctx.send(embed = embed)
@@ -80,7 +82,7 @@ async def on_raw_reaction_add(payload):
                 game.add_player(member)
                 newembed = discord.Embed(title = SETUP_TITLE, description = setup_message(game.players), colour =EMBED_COLOUR)
                 await message.edit(embed = newembed)
-                
+
 @bot.event
 async def on_raw_reaction_remove(payload):
     channel = bot.get_channel(payload.channel_id)
