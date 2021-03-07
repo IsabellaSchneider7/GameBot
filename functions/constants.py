@@ -1,4 +1,5 @@
-from game import Game
-PREFIX = '-'
+PREFIX = '='
+from .game import Game
+
 
 game = Game()

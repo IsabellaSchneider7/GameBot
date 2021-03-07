@@ -30,7 +30,7 @@ class Game:
     def get_first_phrase(self):
         return self.phrases[0]
     def get_last_phrase(self):
-        last = len(phrases)
+        last = len(self.phrases)
         return self.phrases[last-1]
     def add_picture(self, picture):
         self.pictures.append(picture)

@@ -3,3 +3,4 @@ python-dotenv
 apscheduler
 firebase
 python-firebase
+nltk

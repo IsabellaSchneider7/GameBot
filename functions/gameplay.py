@@ -1,5 +1,7 @@
 from discord.ext import commands
-from constants import game
+from .constants import game
+from getFirebaseData import *
+from similarityScore import *
 
 @commands.command(name='startGame')
 async def start_game(ctx):
@@ -47,6 +49,7 @@ async def end_game():
     last = game.get_last_phrase()
     score = compare_sentence(one, last)
     print(score)
+    updateUserScore("brielle", 5)
     game.ctx.send(score)
     for i in range(len(game.log)):
         if i % 2 == 0:
