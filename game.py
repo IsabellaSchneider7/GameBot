@@ -3,10 +3,10 @@ class Game:
         self.players = []
         self.phrases = []
         self.pictures = []
-        self.current_round = None
-        self.current_player = None
-        self.ctx = None
-        self.state_phrase = None
+    current_round = None
+    current_player = None
+    ctx = None
+    state_phrase = None
 
     log = []
 
@@ -53,10 +53,4 @@ class Game:
     def __find_medina(self, players):
         for p in players:
             if p.name == 'medini the genie':
-
-                return p
-
-    def add_to_log(self, thing):
-        self.log.append(thing)
-
                 return p

@@ -1,18 +1,21 @@
 from discord.ext import commands
 from constants import game
-from similarityScore import compare_sentence
+
+from getFirebaseData import *
+from similarityScore import *
+
 
 @commands.command(name='startGame')
 async def start_game(ctx):
     guild = ctx.guild
-    
+
     for member in guild.members:
         if not member.bot:
             game.add_player(member)
 
     print(f'start, players={len(game.players)}')
     game.start(ctx)
-    
+
     player1 = game.current_player
     await player1.create_dm()
     await player1.dm_channel.send('Enter the starting prompt.')
@@ -35,16 +38,17 @@ async def next_phrase():
 
 async def end_game():
     await game.ctx.channel.send('YOUR GAME RESULT:')
-    one = game.get_first_phrase()
-    last = game.get_last_phrase()
-    score = compare_sentence(one, last)
-    print(score)
-    updateUserScore("brielle", 5)
-    game.ctx.send(score)
-
     # Number of prompts is either numdrawings or numdrawings+1
     for i in range(len(game.log)):
         if i % 2 == 0:
             await game.ctx.send(game.log[i])
         else:
             await game.ctx.send(file=game.log[i])
+            
+    one = game.get_first_phrase()
+    last = game.get_last_phrase()
+    score = compare_sentence(one, last)
+    print(score)
+    updateUserScore("brielle", 5)
+    game.ctx.send(score)
+    

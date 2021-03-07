@@ -1,8 +1,8 @@
 import os
-from functions.constants import PREFIX, game
+from constants import PREFIX, game
 from discord.ext import commands
 from dotenv import load_dotenv
-from functions.gameplay import start_game, next_drawing, next_phrase
+from gameplay import start_game, next_drawing, next_phrase
 import discord
 from getFirebaseData import *
 
@@ -27,6 +27,7 @@ async def on_message(message):
         return
 
     if (not message.content.startswith(PREFIX) 
+    and game.current_player.dm_channel != None
     and message.channel.id == game.current_player.dm_channel.id):
         if game.state_phrase:
             if len(message.attachments) > 0:
@@ -68,13 +69,13 @@ async def on_raw_reaction_add(payload):
 async def start(ctx):
     if len(game.players)>2:
         await ctx.send("Starting game...")
-        game.start()
+        game.start(ctx)
     else :
         await ctx.send("Have " + str(3-len(game.players)) +" other player(s) react in order to play")
 
 
 @bot.command(name = "scores")
-async def play(ctx):
+async def play2(ctx):
     data = sortPlayerOrder()
     description = "** PLAYER \t \t SCORE **"
     for element in data:

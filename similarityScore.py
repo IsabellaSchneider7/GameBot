@@ -25,9 +25,10 @@ def compare_sentence(A, B):
     score += 100*len(same_list)/len(newA_list)
     score += get_synonyms(newA_list, newB_list, same_list)
     print(score)
+    return score
 
 def get_synonyms(A_list, B_list, same_list):
-    add_score = 0;
+    add_score = 0
     for item in A_list:
         syn_list = []
         if not item in same_list:
