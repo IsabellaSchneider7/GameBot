@@ -32,7 +32,7 @@ async def start_game(ctx):
     schedule()
 
 @commands.command(name='scores')
-async def play2(ctx):
+async def get_scores(ctx):
     data = sortPlayerOrder()
     description = "** PLAYER \t \t SCORE **"
     for element in data:
@@ -84,7 +84,6 @@ async def end_game():
     print(score)
     updateUserScore("brielle", 5)
     game.ctx.send(score)
-
 
 def schedule():
     scheduler.remove_all_jobs()

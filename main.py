@@ -2,14 +2,14 @@ import os
 from constants import PREFIX, game
 from discord.ext import commands
 from dotenv import load_dotenv
-from gameplay import try_start, next_drawing, next_phrase, play2
+from gameplay import try_start, next_drawing, next_phrase, get_scores
 
 import discord
 from getFirebaseData import *
 
 # Setup
 load_dotenv()
-BOT_TOKEN = os.getenv(BOT_TOKEN)
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 intent = discord.Intents().all()
 
 bot = commands.Bot(command_prefix=PREFIX, intents=intent)
@@ -19,7 +19,7 @@ async def on_ready():
     print('Ready!')
 
 bot.add_command(try_start)
-bot.add_command(play2)
+bot.add_command(get_scores)
 
 @bot.event
 async def on_message(message):
@@ -49,6 +49,7 @@ async def on_message(message):
 messages = []
 @bot.command(name = 'play')
 async def play(ctx):
+    game.reset()
     embed = discord.Embed(title = "Playing game...", description = "React to join game\nPlayers:",colour =0x00ff00)
     message = await ctx.send(embed = embed)
     messages.append(message.id) 
@@ -65,17 +66,5 @@ async def on_raw_reaction_add(payload):
                 newembed = discord.Embed(title = "Playing game...", description = message.embeds[0].description + " " + payload.member.mention, colour =0x00ff00)
                 game.add_player(member)
                 await message.edit(embed = newembed)
-
-# @bot.command(name = "scores")
-# async def play2(ctx):
-#     data = sortPlayerOrder()
-#     description = "** PLAYER \t \t SCORE **"
-#     guild = ctx.guild
-#     for element in data:
-#         name = ctx.guild[0].get_member(element[0]).name
-#         description = description + "\n" + str(name) + "\t - \t" + str(element[1])
-#     embed = discord.Embed(title="Leaderboard", description=description, colour=0x00ff00)
-#     message = await ctx.send(embed = embed)
-
 
 bot.run(BOT_TOKEN)

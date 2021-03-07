@@ -3,13 +3,12 @@ class Game:
         self.players = []
         self.phrases = []
         self.pictures = []
+        self.log = []
 
     current_round = None
     current_player = None
     ctx = None
     state_phrase = None
-
-    log = []
 
     def add_player(self, player):
         self.players.append(player)
@@ -58,3 +57,9 @@ class Game:
         for p in players:
             if p.name == 'medini the genie':
                 return p
+
+    def reset(self):
+        self.players.clear()
+        self.phrases.clear()
+        self.pictures.clear()
+        self.log.clear()
