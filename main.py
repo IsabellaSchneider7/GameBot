@@ -66,6 +66,7 @@ async def start(ctx):
     else :
         await ctx.send("Have " + str(3-len(game.players)) +" other player(s) react in order to play")
 
+
 @bot.command(name = "scores")
 async def play(ctx):
     data = sortPlayerOrder()
@@ -74,5 +75,6 @@ async def play(ctx):
         description = description + "\n" + str(element[0]) + "\t - \t" + str(element[1])
     embed = discord.Embed(title="Leaderboard", description=description, colour=0x00ff00)
     message = await ctx.send(embed = embed)
+
 
 bot.run(BOT_TOKEN)

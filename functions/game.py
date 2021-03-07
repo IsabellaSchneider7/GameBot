@@ -27,7 +27,11 @@ class Game:
     def add_phrase(self, phrase):
         self.phrases.append(phrase)
         self.__next_turn()
-
+    def get_first_phrase(self):
+        return self.phrases[0]
+    def get_last_phrase(self):
+        last = len(phrases)
+        return self.phrases[last-1]
     def add_picture(self, picture):
         self.pictures.append(picture)
         self.__next_turn()

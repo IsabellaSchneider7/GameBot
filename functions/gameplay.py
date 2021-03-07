@@ -43,7 +43,11 @@ async def end_game():
 
     # if len(game.phrases) > len(game.pictures):
     #     await game.ctx.send(game.phrases[-1])
-
+    one = game.get_first_phrase()
+    last = game.get_last_phrase()
+    score = compare_sentence(one, last)
+    print(score)
+    game.ctx.send(score)
     for i in range(len(game.log)):
         if i % 2 == 0:
             await game.ctx.send(game.log[i])
