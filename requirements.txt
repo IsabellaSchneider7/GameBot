@@ -3,3 +3,9 @@ python-dotenv
 apscheduler
 firebase
 python-firebase
+python_jwt
+gcloud
+sseclient
+pycryptodome
+requests-toolbelt
+numpy

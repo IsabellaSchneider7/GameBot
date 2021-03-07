@@ -1,5 +1,5 @@
 from discord.ext import commands
-from constants import game
+from .constants import game
 
 @commands.command(name='startGame')
 async def start_game(ctx):
@@ -9,21 +9,18 @@ async def start_game(ctx):
         if not member.bot:
             game.add_player(member)
 
+    print(f'start, players={len(game.players)}')
     game.start(ctx)
     
     player1 = game.current_player
-    print(f'start, players={len(game.players)}')
 
-    game.phrases.append('the cow jumped over the moon')
-    game.add_to_log(game.phrases[0])
-    await player1.create_dm()
-    await player1.dm_channel.send(f'Please draw **{game.phrases[0]}**')
+    await player1.dm_channel.send('Enter the starting prompt.')
 
 async def next_drawing():
     if game.can_continue():
         player = game.current_player
         await player.create_dm()
-        await player.dm_channel.send(f'draw **{game.phrases[-1]}**')
+        await player.dm_channel.send(f'Please draw **{game.phrases[-1]}**')
     else:
         await end_game()
 
