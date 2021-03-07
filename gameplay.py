@@ -95,7 +95,7 @@ async def end_game():
     for person in game.players:
         updateUserScore(person.id, score)
     print(score)
-    updateUserScore("brielle", 5)
+
     await game.ctx.send(score)
     game.state = State.INACTIVE
 
