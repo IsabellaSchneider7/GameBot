@@ -18,10 +18,9 @@ class Game:
     def remove_player(self, player):
         self.players.remove(player)
 
-    def start(self, ctx):
+    def start(self):
         self.current_round = 1
         self.current_player = self.players[0]
-        self.ctx = ctx
         self.state_phrase = True
 
     def __next_turn(self):
