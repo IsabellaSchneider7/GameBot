@@ -9,10 +9,11 @@ from apscheduler.triggers.cron import CronTrigger
 
 from getFirebaseData import *
 from similarityScore import *
+from randomWordGen import *
 
 @commands.command(name='start')
 async def try_start(ctx):
-    if len(game.players)>2:
+    if len(game.players)>0:
         await ctx.send("Starting game...")
         await start_game(ctx)
     else :
@@ -25,10 +26,14 @@ async def start_game(ctx):
 
     print(f'start, players={len(game.players)}')
     game.start(ctx)
-
     player1 = game.current_player
     await player1.create_dm()
-    await player1.dm_channel.send('Enter the starting prompt.')
+    if (len(game.players)%2 == 0):
+        phrase = get_random_phrase()
+        await player1.dm_channel.send('Prompt: ' + str(phrase))
+
+    else:
+        await player1.dm_channel.send('Enter the starting prompt.')
     schedule()
 
 @commands.command(name='scores')
