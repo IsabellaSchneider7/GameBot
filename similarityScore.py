@@ -39,9 +39,10 @@ def get_synonyms(A_list, B_list, same_list):
 
             for word in syn_list:
                 if word in B_list:
-                    add_score += 15
+                    add_score += 75*1/(len(A_list))
                     break
             print(syn_list)
 
     return add_score
 
+#compare_sentence("house dog cats happy", "home dog cat glad")
