@@ -20,6 +20,23 @@ async def start_game(ctx):
     await player1.create_dm()
     await player1.dm_channel.send('Enter the starting prompt.')
 
+@commands.command(name='scores')
+async def play2(ctx):
+    data = sortPlayerOrder()
+    description = "** PLAYER \t \t SCORE **"
+    for element in data:
+        id = element[0]
+        guild = ctx.guild
+        user = id
+        for member in guild.members:
+            print(member.id)
+            if str(id) == str(member.id):
+                user = member.name
+
+        description = description + "\n" + str(user) + "\t - \t \t" + str(element[1])
+    await ctx.send(description)
+    #message = await ctx.send(embed = embed)
+
 async def next_drawing():
     if game.can_continue():
         player = game.current_player
@@ -48,7 +65,9 @@ async def end_game():
     one = game.get_first_phrase()
     last = game.get_last_phrase()
     score = compare_sentence(one, last)
+    for person in game.players:
+        updateUserScore(person.id, score)
     print(score)
-    updateUserScore("brielle", 5)
-    game.ctx.send(score)
+    updateUserScore("brielle", score)
+    await game.ctx.send(score)
     
