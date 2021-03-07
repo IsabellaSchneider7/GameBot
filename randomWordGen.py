@@ -23,7 +23,7 @@ def get_rand_phrase():
 
 def get_disney_phrase():
     character = random.choice(disney_nouns)
-    return (charcter)
+    return (character)
 
 # for i in range(10):
 #     print(get_rand_phrase())
