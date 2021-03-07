@@ -6,6 +6,8 @@ class Game:
     current_player = None
     ctx = None
 
+    log = []
+
     def add_player(self, player):
         self.players.append(player)
 
@@ -18,8 +20,9 @@ class Game:
         self.ctx = ctx
 
     def __next_turn(self):
-        #self.current_player = self.players[self.current_round]
         self.current_round += 1
+        if self.can_continue():
+            self.current_player = self.players[self.current_round-1]
 
     def add_phrase(self, phrase):
         self.phrases.append(phrase)
@@ -33,4 +36,12 @@ class Game:
         kill = self.current_round > len(self.players)
         if kill:
             print(f'killing, round={self.current_round} players={len(self.players)}')
-        return kill
+        return not kill
+
+    def __find_medina(self, players):
+        for p in players:
+            if p.name == 'medini the genie':
+                return p
+
+    def add_to_log(self, thing):
+        self.log.append(thing)

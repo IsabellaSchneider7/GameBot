@@ -25,15 +25,14 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    #await game.current_player.dm_channel.send(message.channel)
-    #await game.current_player.dm_channel.send(game.current_player.dm_channel)
     if (message.channel.id == game.current_player.dm_channel.id 
     and not message.content.startswith(PREFIX)):
-        #await message.channel.send('moving on...')
         if len(message.attachments) > 0:
+            game.add_to_log(await message.attachments[0].to_file())
             game.add_picture(await message.attachments[0].to_file())
             await next_phrase()
         else:
+            game.add_to_log(message.content)
             game.add_phrase(message.content)
             await next_drawing()
         
