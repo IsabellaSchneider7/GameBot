@@ -1,6 +1,4 @@
 from game import Game
-import discord 
-
 PREFIX = '-'
 TIMEOUT = 150
 REMINDER = 120
