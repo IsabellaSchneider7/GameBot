@@ -82,8 +82,8 @@ async def end_game():
     for person in game.players:
         updateUserScore(person.id, score)
     print(score)
-    updateUserScore("brielle", 5)
-    game.ctx.send(score)
+
+    await game.ctx.send(score)
 
 def schedule():
     scheduler.remove_all_jobs()
