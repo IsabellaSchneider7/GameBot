@@ -1,6 +1,6 @@
 from discord.ext import commands
-from constants import game, TIMEOUT, REMINDER
-from game import Game
+from constants import game, TIMEOUT, REMINDER, is_dm
+from game import Game, State
 import constants
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -12,8 +12,16 @@ from similarityScore import *
 
 @commands.command(name='start')
 async def try_start(ctx):
+    if is_dm(ctx):
+        await ctx.send('This command can only be used in a server!')
+        return
+
+    if game.state == State.PLAYING:
+        await ctx.send('The game is already in progress!')
+        return
+
     if len(game.players)>2:
-        await ctx.send("Starting game...")
+        await ctx.send("Running game...")
         await start_game(ctx)
     else :
         await ctx.send("Have " + str(3-len(game.players)) +" other player(s) react in order to play")
@@ -22,6 +30,7 @@ async def start_game(ctx):
     global scheduler
     scheduler = AsyncIOScheduler()
     scheduler.start()
+    game.state = State.PLAYING
 
     print(f'start, players={len(game.players)}')
     game.start(ctx)
@@ -33,6 +42,10 @@ async def start_game(ctx):
 
 @commands.command(name='scores')
 async def get_scores(ctx):
+    if is_dm(ctx):
+        await ctx.send('This command can only be used in a server!')
+        return
+
     data = sortPlayerOrder()
     description = "** PLAYER \t \t SCORE **"
     for element in data:
@@ -83,7 +96,8 @@ async def end_game():
         updateUserScore(person.id, score)
     print(score)
     updateUserScore("brielle", 5)
-    game.ctx.send(score)
+    await game.ctx.send(score)
+    game.state = State.INACTIVE
 
 def schedule():
     scheduler.remove_all_jobs()
