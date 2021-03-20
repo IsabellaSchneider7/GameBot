@@ -48,7 +48,12 @@ async def on_message(message):
                 await next_phrase()
             else:
                 await message.channel.send('Please send an image.')
-        
+
+@bot.command(name = 'commands')
+async def outputcommands(ctx):
+    embed = discord.Embed(title = "Commands", description = commands, colour =EMBED_COLOUR)
+    await ctx.send(embed = embed)  
+
 messages = []
 @bot.command(name = 'play')
 async def play(ctx):

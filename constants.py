@@ -20,3 +20,4 @@ def setup_message(players):
         string += ' ' + p.mention
     
     return string
+commands = "play- initialize game\nstart- starts game\ncancel- cancels current game"
